@@ -41,25 +41,18 @@ public class BezierCurveInspector : Editor
     {
         var evt = Event.current;
 
-        if (evt.modifiers == EventModifiers.None && evt.type == EventType.MouseUp)
-        {
-            if (isNearAnyPoints)
-            {
-                _idSelected = HandleUtility.nearestControl;
-                evt.Use();
-            }
-        }
-
         for (int i = 0; i < points.Length; i++)
         {
             int id = idx2id(i);
-            bool isSelected = id == _idSelected;
-
-            Handles.color = isSelected ? Color.green : Color.blue;
-
             var size = HandleUtility.GetHandleSize(points[i]) * _curve._handleSize;
 
+            Handles.color = id == _idSelected ? Color.green : Color.blue;
             Handles.SphereHandleCap(id, points[i], Quaternion.identity, size, evt.type);
+
+            var guiColor = GUI.color;
+            GUI.color = Color.black;
+            Handles.Label(points[i], $"({points[i].x:F2}, {points[i].y:F2}, {points[i].z:F2})");
+            GUI.color = guiColor;
         }
 
         if (isSelectAnyPoints)
@@ -68,6 +61,15 @@ public class BezierCurveInspector : Editor
 
             Handles.color = Color.green;
             points[idx] = Handles.PositionHandle(points[idx], Quaternion.identity);
+        }
+
+        if (evt.modifiers == EventModifiers.None && evt.type == EventType.MouseDown)
+        {
+            if (isNearAnyPoints)
+            {
+                _idSelected = HandleUtility.nearestControl;
+                evt.Use();
+            }
         }
 
         if (GUI.changed)
