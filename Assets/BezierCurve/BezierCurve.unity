@@ -261,10 +261,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3159e9fd6f752484381fda9147278000, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isShowAxis: 1
+  _lenAxis: 0.2
+  _width: 5
   _handleSize: 0.2
-  _lineSize: 5
   _points:
-  - {x: -3.0058446, y: -0.24689937, z: 0}
-  - {x: -2.41884, y: 4.90429, z: 0}
-  - {x: 4.0860806, y: 5.36459, z: 0}
+  - {x: -2.2339764, y: 0.31416225, z: 0}
+  - {x: -5.418439, y: 7.641536, z: 0}
+  - {x: 10.896069, y: 8.083279, z: 0}
   - {x: 7.0424924, y: -1.1008615, z: 0}

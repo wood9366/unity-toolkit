@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class BezierCurve : MonoBehaviour
 {
+    public bool _isShowAxis = false;
+    public float _lenAxis = 0.1f;
+    public float _width = 5;
     public float _handleSize = 1;
-    public float _lineSize = 5;
     public Vector3[] _points = new Vector3[]
     {
         Vector3.zero,
@@ -12,7 +14,7 @@ public class BezierCurve : MonoBehaviour
         new Vector3(2, 0, 0),
     };
 
-    private const int NUM_BEZIER_SEGMENTS = 30;
+    public const int NUM_BEZIER_SEGMENTS = 30;
     private Vector3[] _bezierPoints = new Vector3[NUM_BEZIER_SEGMENTS + 1];
 
     void Start()
@@ -22,14 +24,16 @@ public class BezierCurve : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        DrawBezier(Color.green);
+        DrawBezier(Color.white);
     }
 
     public void UpdateBezierPoints()
     {
         for (int i = 0; i <= NUM_BEZIER_SEGMENTS; i++)
         {
-            _bezierPoints[i] = BezierPoint((float)i / NUM_BEZIER_SEGMENTS, _points);
+            var t = (float)i / NUM_BEZIER_SEGMENTS;
+
+            _bezierPoints[i] = BezierPoint(t, _points);
         }
     }
 
@@ -43,14 +47,14 @@ public class BezierCurve : MonoBehaviour
         }
     }
 
-    Vector3 BezierPoint(float t, params Vector3[] cp)
+    static public Vector3 BezierPoint(float t, params Vector3[] cp)
     {
         return new Vector3(Bezier(t, cp[0].x, cp[1].x, cp[2].x, cp[3].x),
                            Bezier(t, cp[0].y, cp[1].y, cp[2].y, cp[3].y),
                            Bezier(t, cp[0].z, cp[1].z, cp[2].z, cp[3].z));
     }
 
-    float Bezier(float t, params float[] w)
+    static public float Bezier(float t, params float[] w)
     {
         var mt = 1 - t;
         var mt2 = mt * mt;
