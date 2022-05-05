@@ -79,14 +79,14 @@ public class BezierCurveInspector : Editor
             {
                 var t = (float)i / BezierCurve.NUM_BEZIER_SEGMENTS;
 
-                var pos = BezierCurve.BezierPoint(t, points);
-                var forward = BezierTangent(t, points);
+                var pos = BezierUtil.BezierPoint(t, points);
+                var forward = BezierUtil.BezierTangent(t, points);
                 Vector3 right = Vector3.one;
                 Vector3 up = Vector3.one;
 
                 if (i == 0)
                 {
-                    var nforward = forward + BezierCurvature(0, points);
+                    var nforward = forward + BezierUtil.BezierCurvature(0, points);
 
                     right = Vector3.Cross(forward, nforward);
                     up = Vector3.Cross(forward, right);
@@ -138,46 +138,5 @@ public class BezierCurveInspector : Editor
 
         Handles.color = Color.green;
         Handles.DrawAAPolyLine(width, 2, pos, pos + up * len);
-    }
-
-    Vector3 BezierTangent(float t, params Vector3[] cp)
-    {
-        return new Vector3(BezierDerivative(t, cp[0].x, cp[1].x, cp[2].x, cp[3].x),
-                           BezierDerivative(t, cp[0].y, cp[1].y, cp[2].y, cp[3].y),
-                           BezierDerivative(t, cp[0].z, cp[1].z, cp[2].z, cp[3].z)).normalized;
-    }
-
-    Vector3 BezierCurvature(float t, params Vector3[] cp)
-    {
-        return new Vector3(BezierDerivative2(t, cp[0].x, cp[1].x, cp[2].x, cp[3].x),
-                           BezierDerivative2(t, cp[0].y, cp[1].y, cp[2].y, cp[3].y),
-                           BezierDerivative2(t, cp[0].z, cp[1].z, cp[2].z, cp[3].z)).normalized;
-    }
-
-    float BezierDerivative2(float t, params float[] w)
-    {
-        var mt = 1 - t;
-
-        var w0 = 3 * (w[1] - w[0]);
-        var w1 = 3 * (w[2] - w[1]);
-        var w2 = 3 * (w[3] - w[2]);
-
-        var w20 = 2 * (w1 - w0);
-        var w21 = 2 * (w2 - w1);
-
-        return w20 * mt + w21 * t;
-    }
-
-    float BezierDerivative(float t, params float[] w)
-    {
-        var mt = 1 - t;
-        var mt2 = mt * mt;
-        var t2 = t * t;
-
-        var w0 = 3 * (w[1] - w[0]);
-        var w1 = 3 * (w[2] - w[1]);
-        var w2 = 3 * (w[3] - w[2]);
-
-        return w0 * mt2 + w1 * 2 * mt * t + w2 * t2;
     }
 }

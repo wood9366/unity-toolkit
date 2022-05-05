@@ -33,7 +33,7 @@ public class BezierCurve : MonoBehaviour
         {
             var t = (float)i / NUM_BEZIER_SEGMENTS;
 
-            _bezierPoints[i] = BezierPoint(t, _points);
+            _bezierPoints[i] = BezierUtil.BezierPoint(t, _points);
         }
     }
 
@@ -45,23 +45,5 @@ public class BezierCurve : MonoBehaviour
         {
             Gizmos.DrawLine(_bezierPoints[i], _bezierPoints[i + 1]);
         }
-    }
-
-    static public Vector3 BezierPoint(float t, params Vector3[] cp)
-    {
-        return new Vector3(Bezier(t, cp[0].x, cp[1].x, cp[2].x, cp[3].x),
-                           Bezier(t, cp[0].y, cp[1].y, cp[2].y, cp[3].y),
-                           Bezier(t, cp[0].z, cp[1].z, cp[2].z, cp[3].z));
-    }
-
-    static public float Bezier(float t, params float[] w)
-    {
-        var mt = 1 - t;
-        var mt2 = mt * mt;
-        var mt3 = mt * mt * mt;
-        var t2 = t * t;
-        var t3 = t * t * t;
-
-        return w[0] * mt3 + w[1] * 3 * mt2 * t + w[2] * 3 * mt * t2 + w[3] * t3;
     }
 }
